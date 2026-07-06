@@ -1,0 +1,26 @@
+<div class="login-container">
+  <div class="login-card">
+    <img src="../../../../assets/img/logo-dutc.png" alt="DUTC Logo" class="login-logo">
+    <h2>Sistema de Facturación</h2>
+
+    <div *ngIf="mensaje" [class.alerta-error]="mensajeTipo === 'error'" [class.alerta-exito]="mensajeTipo === 'exito'" class="alerta">
+      {{ mensaje }}
+    </div>
+
+    <form (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="username">Usuario</label>
+        <input id="username" type="text" [(ngModel)]="username" name="username" placeholder="Ingrese su usuario" [disabled]="cargando">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Ingrese su contraseña" [disabled]="cargando">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="cargando">
+        {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+  </div>
+</div>

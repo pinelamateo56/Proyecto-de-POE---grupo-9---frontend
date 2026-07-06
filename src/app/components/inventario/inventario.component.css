@@ -1,0 +1,194 @@
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.header-actions h2 {
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.filter-group label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.filter-group select,
+.filter-group input {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  min-height: var(--touch-min);
+}
+
+.filter-group input {
+  min-width: 250px;
+}
+
+.acciones-tabla {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.btn-sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  min-height: auto;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--color-secondary);
+  margin-top: var(--space-4);
+}
+
+/* Stock States */
+tr.disponible {
+  background: transparent;
+}
+
+tr.alerta {
+  background: #FFFBEB !important;
+}
+
+tr.alerta:hover {
+  background: #FEF3C7 !important;
+}
+
+tr.sin-stock {
+  background: #FEF2F2 !important;
+}
+
+tr.sin-stock:hover {
+  background: #FEE2E2 !important;
+}
+
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.badge-success {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.badge-warning {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-danger {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: var(--space-4);
+}
+
+.modal-content {
+  background: var(--color-on-primary);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Modal Producto - Ancho ampliado con grid de 2 columnas */
+.modal-producto {
+  max-width: 650px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.form-grid .form-group-full {
+  grid-column: 1 / -1;
+}
+
+.form-grid .form-group-full input {
+  max-width: 50%;
+  margin: 0 auto;
+  display: block;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-secondary);
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-close:hover {
+  color: var(--color-destructive);
+}
+
+.modal-body {
+  padding: var(--space-6);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}

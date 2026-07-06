@@ -1,0 +1,47 @@
+<div class="card">
+  <div class="header-actions">
+    <h2>Gestión de Usuarios</h2>
+    <button class="btn btn-primary" (click)="abrirModal()">Agregar Usuario</button>
+  </div>
+
+  <div *ngIf="mensaje" [class.alerta-error]="mensajeTipo === 'error'" [class.alerta-exito]="mensajeTipo === 'exito'" class="alerta">
+    {{ mensaje }}
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Rol</th>
+        <th>Fecha Creación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios">
+        <td>{{ u.id_usuario }}</td>
+        <td>{{ u.username }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'badge-admin': u.rol === 'admin',
+            'badge-bodeguero': u.rol === 'bodeguero',
+            'badge-cajero': u.rol === 'cajero'
+          }">{{ u.rol }}</span>
+        </td>
+        <td>{{ u.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" (click)="eliminar(u.id_usuario)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="usuarios.length === 0" class="empty-message">No hay usuarios registrados.</p>
+</div>
+
+<app-usuario-modal
+  [visible]="modalVisible"
+  (onCerrar)="cerrarModal()"
+  (onGuardar)="guardarUsuario($event)">
+</app-usuario-modal>

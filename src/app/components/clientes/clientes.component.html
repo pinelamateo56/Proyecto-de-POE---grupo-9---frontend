@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="header-actions">
+    <h2>Gestión de Clientes</h2>
+    <button class="btn btn-primary" (click)="abrirModalNuevo()">Agregar Cliente</button>
+  </div>
+
+  <div *ngIf="mensaje" [class.alerta-error]="mensajeTipo === 'error'" [class.alerta-exito]="mensajeTipo === 'exito'" class="alerta">
+    {{ mensaje }}
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label for="buscar">Buscar:</label>
+      <input id="buscar" type="text" [(ngModel)]="buscarTexto" (input)="aplicarFiltros()"
+             placeholder="Cédula o nombre...">
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cédula</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of clientesFiltrados">
+        <td>{{ c.cedula }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.telefono || '-' }}</td>
+        <td>{{ c.correo || '-' }}</td>
+        <td class="acciones-tabla">
+          <button class="btn btn-sm btn-ghost" (click)="abrirModalEditar(c)">Editar</button>
+          <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-danger" (click)="eliminar(c.id_cliente)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="clientesFiltrados.length === 0" class="empty-message">
+    No se encontraron clientes.
+  </p>
+</div>
+
+<app-cliente-modal
+  [visible]="modalVisible"
+  [cliente]="clienteSeleccionado"
+  (closed)="cerrarModal()"
+  (saved)="guardarCliente($event)">
+</app-cliente-modal>

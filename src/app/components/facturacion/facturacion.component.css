@@ -1,0 +1,151 @@
+.pos-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.pos-left,
+.pos-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="email"] {
+  width: 100%;
+}
+
+.input-with-button {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.input-with-button input {
+  flex: 1;
+}
+
+.input-with-button .btn {
+  white-space: nowrap;
+}
+
+.cliente-info {
+  background: var(--color-muted);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+}
+
+.info-row {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-row .label {
+  font-weight: 600;
+  color: var(--color-secondary);
+  min-width: 80px;
+}
+
+.cantidad-input {
+  width: 80px;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--color-secondary);
+  margin: var(--space-4) 0;
+}
+
+/* Autocomplete */
+.autocomplete-container {
+  position: relative;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-on-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.autocomplete-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.autocomplete-item:hover {
+  background: var(--color-muted);
+}
+
+.item-nombre {
+  font-weight: 500;
+  flex: 1;
+}
+
+.item-codigo {
+  color: var(--color-secondary);
+  font-size: var(--font-size-xs);
+  margin-left: var(--space-2);
+}
+
+.item-stock {
+  color: var(--color-accent);
+  font-size: var(--font-size-xs);
+  margin-left: var(--space-2);
+  font-weight: 600;
+}
+
+/* Nuevo Cliente Form */
+.nuevo-cliente-form {
+  background: var(--color-muted);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  border-left: 3px solid var(--color-accent);
+}
+
+.form-header {
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 768px) {
+  .pos-container {
+    grid-template-columns: 1fr;
+  }
+}

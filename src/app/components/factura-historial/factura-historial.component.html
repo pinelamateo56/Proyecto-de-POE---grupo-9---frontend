@@ -1,0 +1,51 @@
+<div class="card">
+  <h2>Historial de Facturas</h2>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label for="filtroCliente">Cliente:</label>
+      <input id="filtroCliente" type="text" [(ngModel)]="filtroCliente"
+             placeholder="Nombre o cédula..." (input)="aplicarFiltros()">
+    </div>
+    <div class="filter-group">
+      <label for="filtroFechaDesde">Desde:</label>
+      <input id="filtroFechaDesde" type="date" [(ngModel)]="filtroFechaDesde"
+             (change)="aplicarFiltros()">
+    </div>
+    <div class="filter-group">
+      <label for="filtroFechaHasta">Hasta:</label>
+      <input id="filtroFechaHasta" type="date" [(ngModel)]="filtroFechaHasta"
+             (change)="aplicarFiltros()">
+    </div>
+  </div>
+
+  <table *ngIf="facturasFiltradas.length > 0">
+    <thead>
+      <tr>
+        <th>Número</th>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of facturasFiltradas"
+          [routerLink]="['/facturas', f.id_factura]"
+          [queryParams]="getFiltrosQueryParams()"
+          class="clickable-row">
+        <td>{{ f.numero_factura }}</td>
+        <td>{{ formatearFecha(f.fecha_emision) }}</td>
+        <td>{{ f.cliente_identificacion }}</td>
+        <td>{{ f.total_pagar | currency:'USD':'symbol':'1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="facturasFiltradas.length === 0 && facturas.length > 0" style="text-align:center;color:var(--color-secondary);margin-top:var(--space-4);">
+    No se encontraron facturas con los filtros aplicados.
+  </p>
+
+  <p *ngIf="facturas.length === 0" style="text-align:center;color:var(--color-secondary);margin-top:var(--space-4);">
+    No hay facturas registradas.
+  </p>
+</div>

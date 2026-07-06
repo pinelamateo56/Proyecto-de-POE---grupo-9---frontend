@@ -1,0 +1,72 @@
+<div class="modal-overlay" *ngIf="visible" (click)="cerrar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ esEdicion ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+      <button class="btn-close" (click)="cerrar()">&times;</button>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="codigo_barra">Código de Barra *</label>
+          <input id="codigo_barra" type="text" formControlName="codigo_barra"
+                 placeholder="Ingrese código de barras">
+          <div class="error" *ngIf="formulario.get('codigo_barra')?.touched && formulario.get('codigo_barra')?.invalid">
+            <span *ngIf="formulario.get('codigo_barra')?.errors?.['required']">El código es requerido</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input id="nombre" type="text" formControlName="nombre"
+                 placeholder="Ingrese nombre del producto">
+          <div class="error" *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid">
+            <span *ngIf="formulario.get('nombre')?.errors?.['required']">El nombre es requerido</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="precio_venta">Precio de Venta *</label>
+          <input id="precio_venta" type="number" formControlName="precio_venta"
+                 placeholder="0.00" min="0.01" step="0.01"
+                 (keydown)="bloquearNegativos($event)">
+          <div class="error" *ngIf="formulario.get('precio_venta')?.touched && formulario.get('precio_venta')?.invalid">
+            <span *ngIf="formulario.get('precio_venta')?.errors?.['required']">El precio es requerido</span>
+            <span *ngIf="formulario.get('precio_venta')?.errors?.['min']">El precio debe ser mayor a 0</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="stock_actual">Stock Actual *</label>
+            <input id="stock_actual" type="number" formControlName="stock_actual"
+                   placeholder="0" min="0"
+                   (keydown)="bloquearNegativos($event)">
+            <div class="error" *ngIf="formulario.get('stock_actual')?.touched && formulario.get('stock_actual')?.invalid">
+              <span *ngIf="formulario.get('stock_actual')?.errors?.['required']">El stock es requerido</span>
+              <span *ngIf="formulario.get('stock_actual')?.errors?.['min']">El stock no puede ser negativo</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="stock_minimo">Stock Mínimo *</label>
+            <input id="stock_minimo" type="number" formControlName="stock_minimo"
+                   placeholder="0" min="0"
+                   (keydown)="bloquearNegativos($event)">
+            <div class="error" *ngIf="formulario.get('stock_minimo')?.touched && formulario.get('stock_minimo')?.invalid">
+              <span *ngIf="formulario.get('stock_minimo')?.errors?.['required']">El stock mínimo es requerido</span>
+              <span *ngIf="formulario.get('stock_minimo')?.errors?.['min']">El stock mínimo no puede ser negativo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" (click)="cerrar()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid">
+          {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

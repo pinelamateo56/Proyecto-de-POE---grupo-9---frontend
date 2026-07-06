@@ -1,0 +1,25 @@
+<header *ngIf="authService.isLoggedIn()">
+  <h1>DUTC - Sistema de Facturación</h1>
+  <nav>
+    <a routerLink="/inventario" routerLinkActive="active"
+       *ngIf="authService.isAdmin() || authService.isBodeguero()">Inventario</a>
+    <a routerLink="/facturacion" routerLinkActive="active"
+       *ngIf="authService.isAdmin() || authService.isCajero()">Punto de Venta</a>
+    <a routerLink="/clientes" routerLinkActive="active"
+       *ngIf="authService.isAdmin()">Clientes</a>
+    <a routerLink="/facturas" routerLinkActive="active"
+       *ngIf="authService.isAdmin() || authService.isCajero()">Facturas</a>
+    <a routerLink="/reportes" routerLinkActive="active"
+       *ngIf="authService.isAdmin()">Reportes</a>
+    <a routerLink="/usuarios" routerLinkActive="active"
+       *ngIf="authService.isAdmin()">Usuarios</a>
+    <span class="user-info" *ngIf="authService.getUsuario() as user">
+      {{ user.username }} ({{ user.rol }})
+    </span>
+    <a class="btn-logout" (click)="logout()">Cerrar Sesión</a>
+  </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

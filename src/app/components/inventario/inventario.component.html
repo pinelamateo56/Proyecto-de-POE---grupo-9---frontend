@@ -1,0 +1,167 @@
+<div class="card">
+  <div class="header-actions">
+    <h2>Inventario de Productos</h2>
+    <button class="btn btn-primary" (click)="abrirModalNuevo()" *ngIf="authService.isAdmin() || authService.isBodeguero()">Agregar Producto</button>
+  </div>
+
+  <div *ngIf="mensaje" [class.alerta-error]="mensajeTipo === 'error'" [class.alerta-exito]="mensajeTipo === 'exito'" class="alerta">
+    {{ mensaje }}
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label for="filtro">Estado:</label>
+      <select id="filtro" [(ngModel)]="filtroDisponibilidad" (change)="aplicarFiltros()">
+        <option value="todos">Todos</option>
+        <option value="disponibles">Disponibles</option>
+        <option value="alerta">Stock Bajo</option>
+        <option value="sin-stock">Sin Stock</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="buscar">Buscar:</label>
+      <input id="buscar" type="text" [(ngModel)]="buscarTexto" (input)="aplicarFiltros()"
+             placeholder="Código o nombre...">
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Stock Mínimo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of productosFiltrados"
+          [ngClass]="getEstadoStock(p)">
+        <td>{{ p.codigo_barra }}</td>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.precio_venta | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td>{{ p.stock_actual }}</td>
+        <td>{{ p.stock_minimo }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'badge-success': getEstadoStock(p) === 'disponible',
+            'badge-warning': getEstadoStock(p) === 'alerta',
+            'badge-danger': getEstadoStock(p) === 'sin-stock'
+          }">{{ getTextoEstado(p) }}</span>
+        </td>
+        <td class="acciones-tabla">
+          <button class="btn btn-sm btn-ghost" (click)="abrirModalStock(p)"
+                  *ngIf="authService.isAdmin() || authService.isBodeguero()">Stock</button>
+          <button class="btn btn-sm btn-ghost" (click)="abrirModalParametros(p)"
+                  *ngIf="authService.isAdmin()">Parámetros</button>
+          <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-danger" (click)="eliminar(p.id_producto)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="productosFiltrados.length === 0" class="empty-message">
+    No se encontraron productos.
+  </p>
+</div>
+
+<!-- Modal Crear/Editar Producto (Admin/Bodeguero) -->
+<div class="modal-overlay" *ngIf="modalVisible" (click)="cerrarModal()">
+  <div class="modal-content modal-producto" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ productoSeleccionado ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+      <button class="btn-close" (click)="cerrarModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Código de Barra *</label>
+          <input type="text" #inputCodigo [value]="productoSeleccionado?.codigo_barra || ''"
+                 placeholder="Solo números" maxlength="50"
+                 (keydown)="bloquearCodigoBarras($event)" (input)="filtrarCodigoBarras($event)">
+        </div>
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input type="text" #inputNombre [value]="productoSeleccionado?.nombre || ''"
+                 placeholder="Ingrese nombre del producto">
+        </div>
+        <div class="form-group">
+          <label>Precio de Venta *</label>
+          <input type="number" #inputPrecio [value]="productoSeleccionado?.precio_venta || ''"
+                 placeholder="0.00" min="0.01" step="0.01" (keydown)="bloquearNegativos($event)">
+        </div>
+        <div class="form-group">
+          <label>Stock Actual *</label>
+          <input type="number" #inputStock [value]="productoSeleccionado?.stock_actual || ''"
+                 placeholder="0" min="0" (keydown)="bloquearNegativos($event)">
+        </div>
+        <div class="form-group form-group-full">
+          <label>Stock Mínimo *</label>
+          <input type="number" #inputStockMin [value]="productoSeleccionado?.stock_minimo || ''"
+                 placeholder="0" min="0" (keydown)="bloquearNegativos($event)">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="cerrarModal()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardarProducto({
+        codigo_barra: inputCodigo.value,
+        nombre: inputNombre.value,
+        precio_venta: +inputPrecio.value,
+        stock_actual: +inputStock.value,
+        stock_minimo: +inputStockMin.value
+      })">{{ productoSeleccionado ? 'Actualizar' : 'Guardar' }}</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Stock (Admin/Bodeguero) -->
+<div class="modal-overlay" *ngIf="modalStockVisible" (click)="cerrarModalStock()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Actualizar Stock - {{ productoSeleccionado?.nombre }}</h2>
+      <button class="btn-close" (click)="cerrarModalStock()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Stock Actual: {{ productoSeleccionado?.stock_actual }}</label>
+        <input type="number" [(ngModel)]="stockActualizar" min="0"
+               (keydown)="bloquearNegativos($event)">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="cerrarModalStock()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardarStock()">Actualizar Stock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Parámetros (Solo Admin) -->
+<div class="modal-overlay" *ngIf="modalParametrosVisible" (click)="cerrarModalParametros()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Parámetros - {{ productoSeleccionado?.nombre }}</h2>
+      <button class="btn-close" (click)="cerrarModalParametros()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Precio de Venta</label>
+        <input type="number" [(ngModel)]="precioActualizar" min="0.01" step="0.01"
+               (keydown)="bloquearNegativos($event)">
+      </div>
+      <div class="form-group">
+        <label>Stock Mínimo</label>
+        <input type="number" [(ngModel)]="stockMinimoActualizar" min="0"
+               (keydown)="bloquearNegativos($event)">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="cerrarModalParametros()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardarParametros()">Guardar Parámetros</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.header-actions h2 {
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.filter-group label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.filter-group input {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  min-height: var(--touch-min);
+  min-width: 300px;
+}
+
+.acciones-tabla {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.btn-sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  min-height: auto;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--color-secondary);
+  margin-top: var(--space-4);
+}

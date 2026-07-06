@@ -1,0 +1,160 @@
+<div class="pos-container">
+  <div class="pos-left">
+    <div class="card">
+      <h2>Seleccionar Producto</h2>
+
+      <div *ngIf="mensaje" [class.alerta-error]="mensajeTipo === 'error'" [class.alerta-exito]="mensajeTipo === 'exito'" class="alerta">
+        {{ mensaje }}
+      </div>
+
+      <div class="form-group autocomplete-container">
+        <label for="producto">Producto</label>
+        <input id="producto" type="text"
+               [(ngModel)]="textoBusqueda"
+               (input)="filtrarProductos()"
+               (blur)="cerrarDropdown()"
+               placeholder="Escriba el nombre o código del producto...">
+        <div class="autocomplete-dropdown" *ngIf="mostrarDropdown && productosFiltrados.length > 0">
+          <div class="autocomplete-item"
+               *ngFor="let p of productosFiltrados"
+               (mousedown)="seleccionarProducto(p)">
+            <span class="item-nombre">{{ p.nombre }}</span>
+            <span class="item-codigo">{{ p.codigo_barra }}</span>
+            <span class="item-stock">Stock: {{ p.stock_actual }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row" *ngIf="productoSeleccionado">
+        <div class="form-group">
+          <label>Precio Unitario</label>
+          <input type="text" [value]="productoSeleccionado.precio_venta | currency:'USD':'symbol':'1.2-2'" disabled>
+        </div>
+        <div class="form-group">
+          <label for="cantidad">Cantidad</label>
+          <input id="cantidad" type="number" [(ngModel)]="cantidadAgregar" min="1" [max]="productoSeleccionado.stock_actual">
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" (click)="agregarAlCarrito()"
+              [disabled]="!productoSeleccionado || cantidadAgregar <= 0">
+        Agregar al Carrito
+      </button>
+    </div>
+
+    <div class="card">
+      <h2>Datos del Cliente</h2>
+
+      <div class="form-group">
+        <label for="cedula">Cédula</label>
+        <div class="input-with-button">
+          <input id="cedula" type="text" [(ngModel)]="cedulaCliente"
+                 placeholder="Ingrese la cédula" maxlength="10"
+                 (keydown)="bloquearCedula($event)" (input)="filtrarCedula()"
+                 (blur)="buscarCliente()" (keydown.enter)="buscarCliente()">
+          <button class="btn btn-ghost" (click)="buscarCliente()">Buscar</button>
+        </div>
+      </div>
+
+      <div *ngIf="clienteActual" class="cliente-info">
+        <div class="info-row">
+          <span class="label">Nombre:</span>
+          <span>{{ clienteActual.nombre }}</span>
+        </div>
+        <div class="info-row" *ngIf="clienteActual.telefono">
+          <span class="label">Teléfono:</span>
+          <span>{{ clienteActual.telefono }}</span>
+        </div>
+        <div class="info-row" *ngIf="clienteActual.correo">
+          <span class="label">Correo:</span>
+          <span>{{ clienteActual.correo }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="mostrarFormularioCliente" class="nuevo-cliente-form">
+        <div class="form-header">
+          <span>Registro rápido de cliente</span>
+        </div>
+        <div class="form-group">
+          <label for="nombreCliente">Nombre *</label>
+          <input id="nombreCliente" type="text" [(ngModel)]="nuevoClienteNombre"
+                 placeholder="Nombre completo">
+        </div>
+        <div class="form-group">
+          <label for="telefonoCliente">Teléfono</label>
+          <input id="telefonoCliente" type="text" [(ngModel)]="nuevoClienteTelefono"
+                 placeholder="Opcional" maxlength="10"
+                 (keydown)="bloquearTelefono($event)" (input)="filtrarTelefono()">
+        </div>
+        <div class="form-group">
+          <label for="correoCliente">Correo</label>
+          <input id="correoCliente" type="email" [(ngModel)]="nuevoClienteCorreo"
+                 placeholder="Opcional">
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-ghost" (click)="cancelarRegistroCliente()">Cancelar</button>
+          <button class="btn btn-primary" (click)="registrarClienteRapido()">Guardar Cliente</button>
+        </div>
+      </div>
+
+      <button class="btn btn-ghost btn-block" (click)="usarConsumidorFinal()">
+        Consumidor Final
+      </button>
+    </div>
+  </div>
+
+  <div class="pos-right">
+    <div class="card">
+      <h2>Carrito de Compras</h2>
+
+      <table *ngIf="detalles.length > 0">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of detalles; let i = index">
+            <td>{{ d.nombre }}</td>
+            <td>{{ d.precio_unitario | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>
+              <input type="number" [value]="d.cantidad" min="1"
+                     (change)="actualizarCantidad(i, +$any($event.target).value)"
+                     class="cantidad-input">
+            </td>
+            <td>{{ d.subtotal | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="quitarDetalle(i)">Quitar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="detalles.length === 0" class="empty-message">
+        Carrito vacío. Seleccione productos para agregar.
+      </p>
+
+      <div class="total-container">
+        <span>Total: {{ total | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <div class="acciones">
+        <button class="btn btn-success btn-block" (click)="abrirModalPago()"
+                [disabled]="detalles.length === 0 || !clienteActual">
+          Registrar Venta
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-pago-modal
+  [visible]="modalPagoVisible"
+  [total]="total"
+  (onConfirmar)="confirmarPago($event)"
+  (onCancelar)="cancelarPago()">
+</app-pago-modal>

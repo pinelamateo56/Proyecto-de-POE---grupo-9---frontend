@@ -1,0 +1,39 @@
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.header-actions h2 {
+  margin: 0;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--color-secondary);
+  margin: var(--space-4) 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.badge-admin {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.badge-bodeguero {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-cajero {
+  background: #D1FAE5;
+  color: #065F46;
+}

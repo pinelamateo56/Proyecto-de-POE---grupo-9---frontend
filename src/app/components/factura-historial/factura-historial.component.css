@@ -1,0 +1,35 @@
+.filters {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 150px;
+}
+
+.filter-group label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.filter-group input {
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+table tbody tr.clickable-row {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+table tbody tr.clickable-row:hover {
+  background: var(--color-muted);
+}

@@ -1,0 +1,77 @@
+<div class="card">
+  <h2>Reportes y Auditoría</h2>
+
+  <div *ngIf="cargando" class="loading">Cargando estadísticas...</div>
+
+  <div *ngIf="estadisticasInventario && !cargando" class="stats-grid">
+    <div class="stat-card">
+      <h3>Inventario</h3>
+      <div class="stat-row">
+        <span class="stat-label">Total Productos:</span>
+        <span class="stat-value">{{ estadisticasInventario.total_productos }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Stock Bajo:</span>
+        <span class="stat-value warning">{{ estadisticasInventario.stock_bajo }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Sin Stock:</span>
+        <span class="stat-value danger">{{ estadisticasInventario.sin_stock }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card" *ngIf="estadisticasVentas">
+      <h3>Ventas Hoy</h3>
+      <div class="stat-row">
+        <span class="stat-label">Facturas:</span>
+        <span class="stat-value">{{ estadisticasVentas.ventas_hoy.total }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Recaudación:</span>
+        <span class="stat-value">{{ estadisticasVentas.ventas_hoy.monto | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card" *ngIf="estadisticasVentas">
+      <h3>Ventas del Mes</h3>
+      <div class="stat-row">
+        <span class="stat-label">Facturas:</span>
+        <span class="stat-value">{{ estadisticasVentas.ventas_mes.total }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Recaudación:</span>
+        <span class="stat-value">{{ estadisticasVentas.ventas_mes.monto | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card" *ngIf="estadisticasVentas">
+      <h3>Total Histórico</h3>
+      <div class="stat-row">
+        <span class="stat-label">Facturas:</span>
+        <span class="stat-value">{{ estadisticasVentas.total_ventas.total }}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Recaudación:</span>
+        <span class="stat-value">{{ estadisticasVentas.total_ventas.monto | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="estadisticasVentas?.productos_mas_vendidos?.length">
+    <h3>Productos Más Vendidos</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Unidades Vendidas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of estadisticasVentas!.productos_mas_vendidos">
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.total_vendido }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

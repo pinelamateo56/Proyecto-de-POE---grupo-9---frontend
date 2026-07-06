@@ -1,0 +1,53 @@
+<div class="card" *ngIf="factura">
+  <div class="detail-header">
+    <button class="btn btn-ghost btn-back" (click)="volver()">
+      ← Volver
+    </button>
+    <h2>Factura {{ factura.factura.numero_factura }}</h2>
+  </div>
+
+  <div class="factura-info">
+    <div class="info-group">
+      <label>Fecha:</label>
+      <span>{{ formatearFecha(factura.factura.fecha_emision) }}</span>
+    </div>
+    <div class="info-group">
+      <label>Cliente:</label>
+      <span>{{ factura.factura.cliente_identificacion }}</span>
+    </div>
+    <div class="info-group">
+      <label>Método de Pago:</label>
+      <span>{{ factura.factura.metodo_pago === 'efectivo' ? 'Efectivo' : 'Transferencia' }}</span>
+    </div>
+    <div class="info-group">
+      <label>Total:</label>
+      <span class="total">{{ factura.factura.total_pagar | currency:'USD':'symbol':'1.2-2' }}</span>
+    </div>
+  </div>
+
+  <h3>Detalles</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Código</th>
+        <th>Cantidad</th>
+        <th>Precio Unit.</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of factura.detalles">
+        <td>{{ d.nombre_producto }}</td>
+        <td>{{ d.codigo_barra }}</td>
+        <td>{{ d.cantidad }}</td>
+        <td>{{ d.precio_unitario_historico | currency:'USD':'symbol':'1.2-2' }}</td>
+        <td>{{ d.subtotal_item | currency:'USD':'symbol':'1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card" *ngIf="!factura">
+  <p style="text-align:center;color:var(--color-secondary);">Cargando factura...</p>
+</div>

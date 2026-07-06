@@ -1,0 +1,73 @@
+<div class="modal-overlay" *ngIf="visible" (click)="cancelar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Método de Pago</h2>
+      <button class="btn-close" (click)="cancelar()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Selección de método -->
+      <div *ngIf="!metodoSeleccionado" class="metodos-seleccion">
+        <div class="metodo-card" (click)="seleccionarMetodo('efectivo')">
+          <span class="metodo-icon">💵</span>
+          <span class="metodo-label">Efectivo</span>
+        </div>
+        <div class="metodo-card" (click)="seleccionarMetodo('transferencia')">
+          <span class="metodo-icon">📱</span>
+          <span class="metodo-label">Transferencia QR</span>
+        </div>
+      </div>
+
+      <!-- Pago en efectivo -->
+      <div *ngIf="metodoSeleccionado === 'efectivo'" class="efectivo-section">
+        <div class="resumen-pago">
+          <div class="campo-lectura">
+            <label>Total a Pagar</label>
+            <span class="total-display">{{ total | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="campo-entrada">
+            <label for="montoRecibido">Monto Recibido</label>
+            <input id="montoRecibido" type="number" [(ngModel)]="montoRecibido"
+                   (input)="calcularCambio()" (keydown)="bloquearNegativos($event)"
+                   placeholder="0.00" min="0" step="0.01" autofocus>
+          </div>
+          <div class="campo-lectura">
+            <label>Cambio / Vuelto</label>
+            <span class="cambio-display" [class.sin-cambio]="montoRecibido < total">
+              {{ (montoRecibido >= total ? cambio : 0) | currency:'USD':'symbol':'1.2-2' }}
+            </span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" (click)="metodoSeleccionado = null">← Volver</button>
+          <button class="btn btn-success" (click)="confirmarEfectivo()"
+                  [disabled]="montoRecibido < total">
+            Confirmar Pago en Efectivo
+          </button>
+        </div>
+      </div>
+
+      <!-- Pago por transferencia -->
+      <div *ngIf="metodoSeleccionado === 'transferencia'" class="transferencia-section">
+        <div class="qr-container">
+          <div class="qr-placeholder">
+            <div class="qr-code">
+              <img src="assets/img/qr-transferencia.jpeg" alt="Código QR de Transferencia">
+            </div>
+            <p class="qr-instruction">Escanea el código QR con tu aplicación bancaria</p>
+            <p class="qr-monto">Monto: <strong>{{ total | currency:'USD':'symbol':'1.2-2' }}</strong></p>
+          </div>
+        </div>
+        <div class="confirmacion-manual">
+          <p class="nota-confirmación">Una vez verificado el ingreso del dinero, confirma la transferencia:</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" (click)="metodoSeleccionado = null">← Volver</button>
+          <button class="btn btn-success" (click)="confirmarTransferencia()">
+            Confirmar Transferencia
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
