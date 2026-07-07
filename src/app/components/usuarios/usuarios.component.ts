@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 interface Usuario {
   id_usuario: number;
@@ -15,6 +16,7 @@ interface Usuario {
   styleUrls: ['./usuarios.component.css']
 })
 export class UsuariosComponent implements OnInit {
+  private apiUrl = environment.apiBaseUrl + '/api/auth';
   usuarios: Usuario[] = [];
   modalVisible = false;
   mensaje = '';
@@ -30,7 +32,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    this.http.get<Usuario[]>('api/auth').subscribe({
+    this.http.get<Usuario[]>(this.apiUrl).subscribe({
       next: (data) => this.usuarios = data,
       error: () => this.mostrarMensaje('Error al cargar usuarios', 'error')
     });
@@ -45,7 +47,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   guardarUsuario(datos: {username: string, password: string, rol: string}) {
-    this.http.post('api/auth/register', datos).subscribe({
+    this.http.post(`${this.apiUrl}/register`, datos).subscribe({
       next: () => {
         this.cargarUsuarios();
         this.cerrarModal();
@@ -59,7 +61,7 @@ export class UsuariosComponent implements OnInit {
 
   eliminar(id: number) {
     if (confirm('¿Está seguro de eliminar este usuario?')) {
-      this.http.delete(`api/auth/${id}`).subscribe({
+      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
         next: () => {
           this.cargarUsuarios();
           this.mostrarMensaje('Usuario eliminado exitosamente', 'exito');
