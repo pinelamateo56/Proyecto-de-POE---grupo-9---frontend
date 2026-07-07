@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FacturaRequest, FacturaResponse } from '../models/factura';
+import { environment } from '../../environments/environment';
 
 export interface Factura {
   id_factura: number;
@@ -37,7 +38,7 @@ export interface EstadisticasVentas {
 
 @Injectable({ providedIn: 'root' })
 export class FacturasService {
-  private apiUrl = 'api/facturas';
+  private apiUrl = environment.apiBaseUrl + '/api/facturas';
 
   constructor(private http: HttpClient) {}
 
