@@ -20,9 +20,9 @@ export class ClienteModalComponent implements OnInit {
 
   ngOnInit() {
     this.formulario = this.fb.group({
-      cedula: ['', [Validators.required, Validators.maxLength(15)]],
+      cedula: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]*$')]],
       nombre: ['', [Validators.required, Validators.maxLength(100)]],
-      telefono: ['', [Validators.maxLength(20)]],
+      telefono: ['', [Validators.maxLength(10), Validators.pattern('^[0-9]*$')]],
       correo: ['', [Validators.email]]
     });
   }
@@ -35,6 +35,32 @@ export class ClienteModalComponent implements OnInit {
       this.esEdicion = false;
       this.formulario.reset();
     }
+  }
+
+  bloquearCedula(event: KeyboardEvent) {
+    const charCode = event.charCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
+  filtrarCedula(event: Event) {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '').substring(0, 10);
+    this.formulario.get('cedula')?.setValue(input.value, { emitEvent: false });
+  }
+
+  bloquearTelefono(event: KeyboardEvent) {
+    const charCode = event.charCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
+  filtrarTelefono(event: Event) {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '').substring(0, 10);
+    this.formulario.get('telefono')?.setValue(input.value, { emitEvent: false });
   }
 
   cerrar() {
