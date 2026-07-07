@@ -34,7 +34,7 @@
         <td>{{ c.correo || '-' }}</td>
         <td class="acciones-tabla">
           <button class="btn btn-sm btn-ghost" (click)="abrirModalEditar(c)">Editar</button>
-          <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-danger" (click)="eliminar(c.id_cliente)">Eliminar</button>
+          <button *ngIf="authService.isAdmin()" class="btn btn-sm btn-danger" (click)="eliminar(c.id_cliente)">Desactivar</button>
         </td>
       </tr>
     </tbody>

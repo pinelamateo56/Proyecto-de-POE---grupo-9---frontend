@@ -92,14 +92,14 @@ export class ClientesComponent implements OnInit {
   }
 
   eliminar(id: number) {
-    if (confirm('¿Está seguro de eliminar este cliente?')) {
+    if (confirm('¿Está seguro de desactivar este cliente?')) {
       this.clientesService.deleteCliente(id).subscribe({
         next: () => {
           this.cargarClientes();
-          this.mostrarMensaje('Cliente eliminado exitosamente', 'exito');
+          this.mostrarMensaje('Cliente desactivado exitosamente', 'exito');
         },
         error: (err) => {
-          this.mostrarMensaje(err.error?.error || 'Error al eliminar cliente', 'error');
+          this.mostrarMensaje(err.error?.error || 'Error al desactivar cliente', 'error');
         }
       });
     }
