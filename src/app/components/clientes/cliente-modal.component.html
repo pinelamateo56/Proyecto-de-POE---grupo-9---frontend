@@ -1,0 +1,60 @@
+<div class="modal-overlay" *ngIf="visible" (click)="cerrar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ esEdicion ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+      <button class="btn-close" (click)="cerrar()">&times;</button>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="cedula">Cédula *</label>
+          <input id="cedula" type="text" formControlName="cedula"
+                 placeholder="Ingrese la cédula (solo números)"
+                 (keypress)="bloquearCedula($event)" (input)="filtrarCedula($event)">
+          <div class="error" *ngIf="formulario.get('cedula')?.touched && formulario.get('cedula')?.invalid">
+            <span *ngIf="formulario.get('cedula')?.errors?.['required']">La cédula es requerida</span>
+            <span *ngIf="formulario.get('cedula')?.errors?.['pattern']">Solo se permiten números</span>
+            <span *ngIf="formulario.get('cedula')?.errors?.['maxlength']">Máximo 10 dígitos</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input id="nombre" type="text" formControlName="nombre"
+                 placeholder="Ingrese el nombre completo">
+          <div class="error" *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid">
+            <span *ngIf="formulario.get('nombre')?.errors?.['required']">El nombre es requerido</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" type="text" formControlName="telefono"
+                 placeholder="Ingrese el teléfono (solo números)"
+                 (keypress)="bloquearTelefono($event)" (input)="filtrarTelefono($event)">
+          <div class="error" *ngIf="formulario.get('telefono')?.touched && formulario.get('telefono')?.invalid">
+            <span *ngIf="formulario.get('telefono')?.errors?.['pattern']">Solo se permiten números</span>
+            <span *ngIf="formulario.get('telefono')?.errors?.['maxlength']">Máximo 10 dígitos</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="correo">Correo Electrónico</label>
+          <input id="correo" type="email" formControlName="correo"
+                 placeholder="Ingrese el correo (opcional)">
+          <div class="error" *ngIf="formulario.get('correo')?.touched && formulario.get('correo')?.invalid">
+            <span *ngIf="formulario.get('correo')?.errors?.['email']">Formato de correo inválido</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" (click)="cerrar()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid">
+          {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
