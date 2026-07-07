@@ -1,6 +1,7 @@
 {
   "/api": {
-    "target": "courteous-trust-production-9e0c.up.railway.app",
-    "secure": false
+    "target": "https://courteous-trust-production-9e0c.up.railway.app",
+    "secure": true,
+    "changeOrigin": true
   }
 }
