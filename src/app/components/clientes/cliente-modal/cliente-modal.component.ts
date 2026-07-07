@@ -28,12 +28,18 @@ export class ClienteModalComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.cliente) {
-      this.esEdicion = true;
-      this.formulario.patchValue(this.cliente);
-    } else {
-      this.esEdicion = false;
-      this.formulario.reset();
+    if (this.formulario) {
+      if (this.cliente) {
+        this.esEdicion = true;
+        const datosLimpios = {
+          ...this.cliente,
+          telefono: (this.cliente.telefono || '').replace(/[^0-9]/g, '')
+        };
+        this.formulario.patchValue(datosLimpios);
+      } else {
+        this.esEdicion = false;
+        this.formulario.reset();
+      }
     }
   }
 
