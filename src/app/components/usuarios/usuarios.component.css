@@ -9,6 +9,11 @@
   margin: 0;
 }
 
+.header-buttons {
+  display: flex;
+  gap: var(--space-2);
+}
+
 .empty-message {
   text-align: center;
   color: var(--color-secondary);
@@ -36,4 +41,14 @@
 .badge-cajero {
   background: #D1FAE5;
   color: #065F46;
+}
+
+.btn-warning {
+  background: #F59E0B;
+  color: white;
+}
+
+.btn-success {
+  background: #10B981;
+  color: white;
 }

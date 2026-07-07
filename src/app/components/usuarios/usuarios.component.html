@@ -1,7 +1,13 @@
 <div class="card">
   <div class="header-actions">
     <h2>Gestión de Usuarios</h2>
-    <button class="btn btn-primary" (click)="abrirModal()">Agregar Usuario</button>
+    <div class="header-buttons">
+      <button class="btn" [class.btn-warning]="!mostrarInactivos" [class.btn-primary]="mostrarInactivos"
+              (click)="toggleInactivos()">
+        {{ mostrarInactivos ? 'Ver Activos' : 'Ver Inactivos' }}
+      </button>
+      <button class="btn btn-primary" (click)="abrirModal()">Agregar Usuario</button>
+    </div>
   </div>
 
   <div *ngIf="mensaje" [class.alerta-error]="mensajeTipo === 'error'" [class.alerta-exito]="mensajeTipo === 'exito'" class="alerta">
@@ -31,13 +37,15 @@
         </td>
         <td>{{ u.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>
-          <button class="btn btn-sm btn-danger" (click)="eliminar(u.id_usuario)">Eliminar</button>
+          <button *ngIf="!mostrarInactivos" class="btn btn-sm btn-danger" (click)="eliminar(u.id_usuario)">Desactivar</button>
+          <button *ngIf="mostrarInactivos" class="btn btn-sm btn-success" (click)="reactivar(u.id_usuario)">Reactivar</button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <p *ngIf="usuarios.length === 0" class="empty-message">No hay usuarios registrados.</p>
+  <p *ngIf="usuarios.length === 0 && !mostrarInactivos" class="empty-message">No hay usuarios activos.</p>
+  <p *ngIf="usuarios.length === 0 && mostrarInactivos" class="empty-message">No hay usuarios inactivos.</p>
 </div>
 
 <app-usuario-modal
