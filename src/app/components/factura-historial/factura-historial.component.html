@@ -25,6 +25,7 @@
         <th>Número</th>
         <th>Fecha</th>
         <th>Cliente</th>
+        <th>Cédula</th>
         <th>Total</th>
       </tr>
     </thead>
@@ -35,6 +36,7 @@
           class="clickable-row">
         <td>{{ f.numero_factura }}</td>
         <td>{{ formatearFecha(f.fecha_emision) }}</td>
+        <td>{{ f.cliente_nombre || 'Consumidor Final' }}</td>
         <td>{{ f.cliente_identificacion }}</td>
         <td>{{ f.total_pagar | currency:'USD':'symbol':'1.2-2' }}</td>
       </tr>
